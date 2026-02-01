@@ -44,7 +44,10 @@ class Enqueue_Assets {
             // enqueue admin js
             // wp_enqueue_script( "wpb-bootstrap", PLUGIN_ADMIN_ASSETS_DIR_URL . "/js/bootstrap.bundle.min.js", [], false, true );
             wp_enqueue_script( "wpb-admin-js", PLUGIN_ADMIN_ASSETS_DIR_URL . "/js/admin-script.js", [ 'jquery' ], time(), true );
-            wp_localize_script( "wpb-admin-js", "wpb_admin_localize", array( "ajax_url" => admin_url( "admin-ajax.php" ) ) );
+            wp_localize_script( "wpb-admin-js", "wpb_admin_localize", array(
+                "ajax_url" => admin_url( "admin-ajax.php" ),
+                "nonce" => wp_create_nonce( "save_sslcommerz_settings" ),
+            ) );
         }
 
     }

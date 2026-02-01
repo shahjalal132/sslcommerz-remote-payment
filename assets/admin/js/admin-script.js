@@ -284,5 +284,63 @@
       });
     });
     // save options end
+
+    // save sslcommerz settings start
+    $("#save_sslcommerz_settings").on("click", function () {
+      const store_id = $("#sslcommerz_store_id").val();
+      const store_password = $("#sslcommerz_store_password").val();
+      const is_sandbox = $("#sslcommerz_is_sandbox").is(":checked") ? 1 : 0;
+      const encryption_key = $("#sslcommerz_encryption_key").val();
+      const laravel_success_url = $("#sslcommerz_laravel_success_url").val();
+      const laravel_fail_url = $("#sslcommerz_laravel_fail_url").val();
+
+      // add loading spinner
+      const loader_button = $("#save_sslcommerz_settings .spinner-loader-wrapper");
+      $(loader_button).addClass("loader-spinner");
+
+      $.ajax({
+        type: "POST",
+        url: wpb_admin_localize.ajax_url,
+        data: {
+          action: "save_sslcommerz_settings",
+          sslcommerz_store_id: store_id,
+          sslcommerz_store_password: store_password,
+          sslcommerz_is_sandbox: is_sandbox,
+          sslcommerz_encryption_key: encryption_key,
+          sslcommerz_laravel_success_url: laravel_success_url,
+          sslcommerz_laravel_fail_url: laravel_fail_url,
+          nonce: wpb_admin_localize.nonce || "",
+        },
+        success: function (response) {
+          // remove loading spinner
+          $(loader_button).removeClass("loader-spinner");
+
+          if (true === response.success) {
+            showToast({
+              type: "success",
+              timeout: 2000,
+              title: `${response.data}`,
+            });
+          } else {
+            showToast({
+              type: "error",
+              timeout: 2000,
+              title: `${response.data}`,
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          // remove loading spinner
+          $(loader_button).removeClass("loader-spinner");
+
+          showToast({
+            type: "error",
+            timeout: 2000,
+            title: "An error occurred while saving settings",
+          });
+        },
+      });
+    });
+    // save sslcommerz settings end
   });
 })(jQuery);
