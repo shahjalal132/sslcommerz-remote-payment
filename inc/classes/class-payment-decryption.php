@@ -26,20 +26,27 @@ class Payment_Decryption {
      */
     public function decrypt_payment_data( $encryptedPayload, $encryptionKey ) {
         try {
+            $this->put_program_logs( 'Decrypting payment data: ' . $encryptedPayload );
+
             // Step 1: Decode base64 to get JSON string
             $jsonPayload = base64_decode( $encryptedPayload, true );
             if ( $jsonPayload === false ) {
+                $this->put_program_logs( 'Invalid base64 encoded data' );
                 throw new \Exception( 'Invalid base64 encoded data' );
             }
 
             // Step 2: Decode JSON to get encryption components
             $payload = json_decode( $jsonPayload, true );
             if ( json_last_error() !== JSON_ERROR_NONE ) {
+                $this->put_program_logs( 'Invalid JSON format: ' . json_last_error_msg() );
                 throw new \Exception( 'Invalid JSON format: ' . json_last_error_msg() );
             }
 
+            $this->put_program_logs( 'Payload: ' . json_encode( $payload ) );
+
             // Step 3: Validate required fields
             if ( ! isset( $payload['iv'] ) || ! isset( $payload['value'] ) || ! isset( $payload['mac'] ) ) {
+                $this->put_program_logs( 'Missing required encryption fields' );
                 throw new \Exception( 'Missing required encryption fields' );
             }
 
@@ -56,6 +63,7 @@ class Payment_Decryption {
             $providedMac = base64_decode( $payload['mac'], true );
 
             if ( ! hash_equals( $calculatedMac, $providedMac ) ) {
+                $this->put_program_logs( 'HMAC verification failed - data may be tampered' );
                 throw new \Exception( 'HMAC verification failed - data may be tampered' );
             }
 
@@ -73,6 +81,7 @@ class Payment_Decryption {
             );
 
             if ( $decrypted === false ) {
+                $this->put_program_logs( 'Decryption failed: ' . ( $error ? $error : 'Unknown error' ) );
                 $error = openssl_error_string();
                 throw new \Exception( 'Decryption failed: ' . ( $error ? $error : 'Unknown error' ) );
             }
@@ -80,8 +89,11 @@ class Payment_Decryption {
             // Step 8: Decode JSON to get original array
             $data = json_decode( $decrypted, true );
             if ( json_last_error() !== JSON_ERROR_NONE ) {
+                $this->put_program_logs( 'Failed to decode decrypted data: ' . json_last_error_msg() );
                 throw new \Exception( 'Failed to decode decrypted data: ' . json_last_error_msg() );
             }
+
+            $this->put_program_logs( 'Decrypted data: ' . json_encode( $data ) );
 
             return $data;
 

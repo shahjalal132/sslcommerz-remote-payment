@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('PROJECT_PATH')) {
-    define('PROJECT_PATH', 'http://localhost/project-path'); // replace this value with your project path
+    define('PROJECT_PATH', 'http://localhost:8080'); // replace this value with your project path
 }
 
 if (!defined('IS_SANDBOX')) {
@@ -9,18 +9,18 @@ if (!defined('IS_SANDBOX')) {
 }
 
 if (!defined('STORE_ID')) {
-    define('STORE_ID', ''); // your store id. For sandbox, register at https://developer.sslcommerz.com/registration/
+    define('STORE_ID', 'nixso6952034d24c43'); // your store id. For sandbox, register at https://developer.sslcommerz.com/registration/
 }
 
 if (!defined('STORE_PASSWORD')) {
-    define('STORE_PASSWORD', ''); // your store password.
+    define('STORE_PASSWORD', 'nixso6952034d24c43@ssl'); // your store password.
 }
 
 return [
-    'success_url' => 'pg_redirection/success.php', // your success url
-    'failed_url' => 'pg_redirection/fail.php', // your fail url
-    'cancel_url' => 'pg_redirection/cancel.php', //your cancel url
-    'ipn_url' => 'pg_redirection/ipn.php', // your ipn url
+    'success_url' => 'wp-json/api/v1/payment/success', // your success url
+    'failed_url' => 'wp-json/api/v1/payment/fail', // your fail url
+    'cancel_url' => 'wp-json/api/v1/payment/cancel', //your cancel url
+    'ipn_url' => 'wp-json/api/v1/payment/ipn', // your ipn url
 
 
     'projectPath' => PROJECT_PATH,

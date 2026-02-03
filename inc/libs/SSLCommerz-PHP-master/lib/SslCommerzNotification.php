@@ -21,6 +21,11 @@ class SslCommerzNotification extends AbstractSslCommerz
     private $error;
 
     /**
+     * @var object|null
+     */
+    protected $sslc_data;
+
+    /**
      * SslCommerzNotification constructor.
      */
     public function __construct()

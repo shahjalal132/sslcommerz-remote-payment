@@ -95,6 +95,48 @@ class SSLCommerz_Config {
             $config_content
         );
 
+        // Extract relative paths from full URLs for callback URLs
+        // The library will combine projectPath + '/' + callback_url
+        $site_url = rtrim( site_url(), '/' );
+        $success_path = str_replace( $site_url, '', $config['success_url'] );
+        $failed_path = str_replace( $site_url, '', $config['failed_url'] );
+        $cancel_path = str_replace( $site_url, '', $config['cancel_url'] );
+        $ipn_path = str_replace( $site_url, '', $config['ipn_url'] );
+        
+        // Remove leading slash if present (library will add it)
+        $success_path = ltrim( $success_path, '/' );
+        $failed_path = ltrim( $failed_path, '/' );
+        $cancel_path = ltrim( $cancel_path, '/' );
+        $ipn_path = ltrim( $ipn_path, '/' );
+
+        // Update success_url
+        $config_content = preg_replace(
+            "/['\"]success_url['\"]\s*=>\s*['\"].*?['\"]/",
+            "'success_url' => '" . addslashes( $success_path ) . "'",
+            $config_content
+        );
+
+        // Update failed_url
+        $config_content = preg_replace(
+            "/['\"]failed_url['\"]\s*=>\s*['\"].*?['\"]/",
+            "'failed_url' => '" . addslashes( $failed_path ) . "'",
+            $config_content
+        );
+
+        // Update cancel_url
+        $config_content = preg_replace(
+            "/['\"]cancel_url['\"]\s*=>\s*['\"].*?['\"]/",
+            "'cancel_url' => '" . addslashes( $cancel_path ) . "'",
+            $config_content
+        );
+
+        // Update ipn_url
+        $config_content = preg_replace(
+            "/['\"]ipn_url['\"]\s*=>\s*['\"].*?['\"]/",
+            "'ipn_url' => '" . addslashes( $ipn_path ) . "'",
+            $config_content
+        );
+
         // Write updated config
         return file_put_contents( $config_file, $config_content ) !== false;
     }

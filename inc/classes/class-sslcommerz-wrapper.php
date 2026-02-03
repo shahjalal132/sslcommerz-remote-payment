@@ -9,10 +9,12 @@
 namespace BOILERPLATE\Inc;
 
 use BOILERPLATE\Inc\Traits\Singleton;
+use BOILERPLATE\Inc\Traits\Program_Logs;
 
 class SSLCommerz_Wrapper {
 
     use Singleton;
+    use Program_Logs;
 
     /**
      * Initialize SSLCommerz payment
@@ -37,12 +39,17 @@ class SSLCommerz_Wrapper {
         $paymentData['cancel_url'] = $callback_urls['cancel_url'];
         $paymentData['ipn_url'] = $callback_urls['ipn_url'];
 
+        $this->put_program_logs( 'Payment data with callback URLs: ' . json_encode( $paymentData ) );
+
         try {
             $sslcz = new \SslCommerz\SslCommerzNotification();
             $response = $sslcz->makePayment( $paymentData, 'hosted' );
 
+            $this->put_program_logs( 'SSLCommerz response: ' . json_encode( $response ) );
+
             return $response;
         } catch ( \Exception $e ) {
+            $this->put_program_logs( 'SSLCommerz error: ' . $e->getMessage() );
             return false;
         }
     }
