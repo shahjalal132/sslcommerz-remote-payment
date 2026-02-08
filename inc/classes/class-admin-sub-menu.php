@@ -87,7 +87,7 @@ class Admin_Sub_Menu {
         // Sanitize and get form data
         $store_id = sanitize_text_field( $_POST['sslcommerz_store_id'] ?? '' );
         $store_password = sanitize_text_field( $_POST['sslcommerz_store_password'] ?? '' );
-        $is_sandbox = isset( $_POST['sslcommerz_is_sandbox'] ) ? true : false;
+        $is_sandbox = isset( $_POST['sslcommerz_is_sandbox'] ) && $_POST['sslcommerz_is_sandbox'] == 1 ? 1 : 0;
         $encryption_key = sanitize_text_field( $_POST['sslcommerz_encryption_key'] ?? '' );
         $laravel_success_url = esc_url_raw( $_POST['sslcommerz_laravel_success_url'] ?? '' );
         $laravel_fail_url = esc_url_raw( $_POST['sslcommerz_laravel_fail_url'] ?? '' );
@@ -109,7 +109,7 @@ class Admin_Sub_Menu {
         // Save options
         update_option( 'sslcommerz_store_id', $store_id );
         update_option( 'sslcommerz_store_password', $store_password );
-        update_option( 'sslcommerz_is_sandbox', $is_sandbox );
+        update_option( 'sslcommerz_is_sandbox', (bool) $is_sandbox );
         update_option( 'sslcommerz_encryption_key', $encryption_key );
         update_option( 'sslcommerz_laravel_success_url', $laravel_success_url );
         update_option( 'sslcommerz_laravel_fail_url', $laravel_fail_url );
