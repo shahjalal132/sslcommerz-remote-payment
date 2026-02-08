@@ -5,15 +5,15 @@ if (!defined('PROJECT_PATH')) {
 }
 
 if (!defined('IS_SANDBOX')) {
-    define('IS_SANDBOX', true); // 'true' for sandbox, 'false' for live
+    define('IS_SANDBOX', false); // 'true' for sandbox, 'false' for live
 }
 
 if (!defined('STORE_ID')) {
-    define('STORE_ID', 'nixso6952034d24c43'); // your store id. For sandbox, register at https://developer.sslcommerz.com/registration/
+    define('STORE_ID', 'threebrothersandconstruction0live'); // your store id. For sandbox, register at https://developer.sslcommerz.com/registration/
 }
 
 if (!defined('STORE_PASSWORD')) {
-    define('STORE_PASSWORD', 'nixso6952034d24c43@ssl'); // your store password.
+    define('STORE_PASSWORD', '69709B1A2C38640907'); // your store password.
 }
 
 return [

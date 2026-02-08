@@ -9,10 +9,12 @@
 namespace BOILERPLATE\Inc;
 
 use BOILERPLATE\Inc\Traits\Singleton;
+use BOILERPLATE\Inc\Traits\Program_Logs;
 
 class SSLCommerz_Config {
 
     use Singleton;
+    use Program_Logs;
 
     /**
      * Get SSLCommerz configuration array
