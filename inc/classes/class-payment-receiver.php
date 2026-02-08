@@ -59,11 +59,10 @@ class Payment_Receiver {
             $json_data = urldecode( $url_encoded_data );
             
             // Remove any slashes that might have been added by WordPress/PHP
-            // WordPress may add magic quotes, so we use wp_unslash() to handle it properly
             $json_data = wp_unslash( $json_data );
-            
-            $this->put_program_logs( 'Payment data (after URL decode and unslash): ' . $json_data );
 
+            $this->put_program_logs( 'Payment data (after URL decode and unslash): ' . $json_data );
+            
             // Decode JSON payment data
             $payment_data = json_decode( $json_data, true );
 

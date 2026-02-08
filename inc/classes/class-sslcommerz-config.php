@@ -23,6 +23,19 @@ class SSLCommerz_Config {
         $store_id = get_option( 'sslcommerz_store_id', '' );
         $store_password = get_option( 'sslcommerz_store_password', '' );
         $is_sandbox = get_option( 'sslcommerz_is_sandbox', true );
+        $laravel_success_url = get_option( 'sslcommerz_laravel_success_url', '' );
+        $laravel_fail_url = get_option( 'sslcommerz_laravel_fail_url', '' );
+
+        $config_details = sprintf(
+            'Store ID: %s, Store Password: %s, Is Sandbox: %s, Laravel Success URL: %s, Laravel Fail URL: %s',
+            $store_id,
+            $store_password,
+            $is_sandbox ? 'true' : 'false',
+            $laravel_success_url,
+            $laravel_fail_url
+        );
+
+        $this->put_program_logs( 'SSLCommerz config details: ' . $config_details );
 
         // Get site URL for callbacks
         $site_url = site_url();
@@ -45,6 +58,8 @@ class SSLCommerz_Config {
             'connect_from_localhost' => false,
             'verify_hash' => true,
         );
+
+        $this->put_program_logs( 'SSLCommerz config: ' . json_encode( $config ) );
 
         return $config;
     }
