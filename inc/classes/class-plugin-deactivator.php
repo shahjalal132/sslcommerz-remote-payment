@@ -10,7 +10,13 @@
 class Plugin_Deactivator {
 
     public static function deactivate() {
-        // Define your code here
+        self::delete_database_table();
+    }
+
+    private static function delete_database_table() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sslcommerz_transactions';
+        $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
     }
 
 }

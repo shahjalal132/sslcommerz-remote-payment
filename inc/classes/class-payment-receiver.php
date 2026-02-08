@@ -61,7 +61,7 @@ class Payment_Receiver {
             // Remove any slashes that might have been added by WordPress/PHP
             $json_data = wp_unslash( $json_data );
 
-            $this->put_program_logs( 'Payment data (after URL decode and unslash): ' . $json_data );
+            // $this->put_program_logs( 'Payment data (after URL decode and unslash): ' . $json_data );
             
             // Decode JSON payment data
             $payment_data = json_decode( $json_data, true );
@@ -165,8 +165,6 @@ class Payment_Receiver {
      */
     private function redirect_to_laravel_fail( $reason = '', $payment_data = array() ) {
         $fail_url = get_option( 'sslcommerz_laravel_fail_url' );
-
-        $this->put_program_logs( 'Redirecting to Laravel fail URL: ' . $fail_url );
 
         if ( empty( $fail_url ) ) {
             wp_die( 'Payment processing failed. ' . $reason, 'Payment Error', array( 'response' => 500 ) );

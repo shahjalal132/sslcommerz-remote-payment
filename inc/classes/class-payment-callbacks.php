@@ -84,7 +84,7 @@ class Payment_Callbacks {
     public function handle_success_callback( $request ) {
         $post_data = $request->get_body_params();
 
-        $this->put_program_logs( 'Handling success callback with data: ' . json_encode( $post_data ) );
+        // $this->put_program_logs( 'Handling success callback with data: ' . json_encode( $post_data ) );
 
         if ( empty( $post_data['tran_id'] ) ) {
             return new \WP_Error( 'invalid_data', 'Missing transaction ID', array( 'status' => 400 ) );
@@ -98,7 +98,7 @@ class Payment_Callbacks {
         $db_handler = Database_Handler::get_instance();
         $transaction = $db_handler->get_transaction_by_tran_id( $tran_id );
 
-        $this->put_program_logs( 'Transaction from success callback: ' . json_encode( $transaction ) );
+        // $this->put_program_logs( 'Transaction from success callback: ' . json_encode( $transaction ) );
 
         if ( ! $transaction ) {
             $this->put_program_logs( 'Transaction not found in success callback' );
@@ -107,7 +107,7 @@ class Payment_Callbacks {
 
         // Validate transaction if status is Pending or Processing
         if ( in_array( $transaction->status, array( 'Pending', 'Processing' ) ) ) {
-            $this->put_program_logs( 'Transaction is Pending or Processing in success callback' );
+            // $this->put_program_logs( 'Transaction is Pending or Processing in success callback' );
             // Update config file
             $config_manager = SSLCommerz_Config::get_instance();
             $config_manager->update_config_file();
@@ -125,10 +125,10 @@ class Payment_Callbacks {
                 // Clean any output that might have been generated
                 ob_end_clean();
 
-                $this->put_program_logs( 'Validated: ' . json_encode( $validated ) );
+                // $this->put_program_logs( 'Validated: ' . json_encode( $validated ) );
 
                 if ( $validated ) {
-                    $this->put_program_logs( 'Validated successfully in success callback' );
+                    // $this->put_program_logs( 'Validated successfully in success callback' );
                     // Update transaction status
                     $additional_data = array(
                         'sslcommerz_val_id' => $post_data['val_id'] ?? '',
@@ -147,7 +147,7 @@ class Payment_Callbacks {
                     $this->redirect_to_laravel_fail( $transaction->order_id, 'Payment validation failed' );
                 }
             } catch ( \Exception $e ) {
-                $this->put_program_logs( 'Success callback error: ' . $e->getMessage() );
+                // $this->put_program_logs( 'Success callback error: ' . $e->getMessage() );
                 $db_handler->update_transaction_status( $tran_id, 'Failed' );
                 $this->redirect_to_laravel_fail( $transaction->order_id, 'Payment validation error' );
             }
@@ -169,7 +169,7 @@ class Payment_Callbacks {
     public function handle_fail_callback( $request ) {
         $post_data = $request->get_body_params();
 
-        $this->put_program_logs( 'Fail callback data: ' . json_encode( $post_data ) );
+        // $this->put_program_logs( 'Fail callback data: ' . json_encode( $post_data ) );
 
         if ( empty( $post_data['tran_id'] ) ) {
             return new \WP_Error( 'invalid_data', 'Missing transaction ID', array( 'status' => 400 ) );
@@ -182,7 +182,7 @@ class Payment_Callbacks {
         $db_handler = Database_Handler::get_instance();
         $transaction = $db_handler->get_transaction_by_tran_id( $tran_id );
 
-        $this->put_program_logs( 'Transaction from fail callback: ' . json_encode( $transaction ) );
+        // $this->put_program_logs( 'Transaction from fail callback: ' . json_encode( $transaction ) );
 
         if ( $transaction ) {
             // Update transaction status
@@ -207,7 +207,7 @@ class Payment_Callbacks {
     public function handle_cancel_callback( $request ) {
         $post_data = $request->get_body_params();
 
-        $this->put_program_logs( 'Cancel callback data: ' . json_encode( $post_data ) );
+        // $this->put_program_logs( 'Cancel callback data: ' . json_encode( $post_data ) );
 
         if ( empty( $post_data['tran_id'] ) ) {
             return new \WP_Error( 'invalid_data', 'Missing transaction ID', array( 'status' => 400 ) );
@@ -242,7 +242,7 @@ class Payment_Callbacks {
     public function handle_ipn_callback( $request ) {
         $post_data = $request->get_body_params();
 
-        $this->put_program_logs( 'IPN callback data: ' . json_encode( $post_data ) );
+        // $this->put_program_logs( 'IPN callback data: ' . json_encode( $post_data ) );
 
         if ( empty( $post_data['tran_id'] ) || empty( $post_data['status'] ) ) {
             return new \WP_Error( 'invalid_data', 'Missing required data', array( 'status' => 400 ) );
@@ -318,7 +318,7 @@ class Payment_Callbacks {
                     return new \WP_Error( 'invalid_status', 'Invalid payment status', array( 'status' => 400 ) );
             }
         } catch ( \Exception $e ) {
-            $this->put_program_logs( 'IPN callback error: ' . $e->getMessage() );
+            // $this->put_program_logs( 'IPN callback error: ' . $e->getMessage() );
             return new \WP_Error( 'processing_error', 'Error processing IPN', array( 'status' => 500 ) );
         }
     }
@@ -333,7 +333,7 @@ class Payment_Callbacks {
     private function redirect_to_laravel_success( $order_id, $tran_id, $amount ) {
         $success_url = get_option( 'sslcommerz_laravel_success_url' );
 
-        $this->put_program_logs( 'Redirecting to Laravel success URL: ' . $success_url );
+        // $this->put_program_logs( 'Redirecting to Laravel success URL: ' . $success_url );
 
         if ( empty( $success_url ) ) {
             wp_die( 'Payment successful but callback URL not configured.', 'Payment Success', array( 'response' => 500 ) );
@@ -349,7 +349,7 @@ class Payment_Callbacks {
             $success_url
         );
 
-        $this->put_program_logs( 'Redirecting to Laravel success URL: ' . $redirect_url );
+        // $this->put_program_logs( 'Redirecting to Laravel success URL: ' . $redirect_url );
 
         wp_redirect( $redirect_url );
         exit;
@@ -365,7 +365,7 @@ class Payment_Callbacks {
     private function redirect_to_laravel_fail( $order_id, $reason = '', $status = 'failed' ) {
         $fail_url = get_option( 'sslcommerz_laravel_fail_url' );
 
-        $this->put_program_logs( 'Redirecting to Laravel fail URL: ' . $fail_url );
+        // $this->put_program_logs( 'Redirecting to Laravel fail URL: ' . $fail_url );
 
         if ( empty( $fail_url ) ) {
             wp_die( 'Payment failed. ' . $reason, 'Payment Error', array( 'response' => 500 ) );

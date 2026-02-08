@@ -39,8 +39,6 @@ class SSLCommerz_Wrapper {
         $paymentData['cancel_url'] = $callback_urls['cancel_url'];
         $paymentData['ipn_url'] = $callback_urls['ipn_url'];
 
-        $this->put_program_logs( 'Payment data with callback URLs: ' . json_encode( $paymentData ) );
-
         try {
             $sslcz = new \SslCommerz\SslCommerzNotification();
             $response = $sslcz->makePayment( $paymentData, 'hosted' );
